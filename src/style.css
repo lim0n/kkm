@@ -1,2 +1,61 @@
-body {margin: 0;}
-.hello {color: green;}
+:root {
+    --color-1: #fff;
+    --color-2: #fafafa;
+    --color-3: #f0f0f0;
+    --color-4: #efefef;
+    --color-5: #e8e8e8;
+    --color-6: #e0e0e0;
+    --cell-border: var(--color-4);
+    --cell-bg: var(--color-3);
+    --focused-cell-border: var(--color-5);
+    --focused-cell-bg: var(--color-6);
+}
+
+* {box-sizing: border-box;}
+body {margin: 0; padding: 1rem;}
+
+html,
+body,
+custom-grid {
+    height: 100%;
+}
+
+custom-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns-count), 1fr);
+    gap: calc( ( 100vw + 100vh ) / 200 );
+    background: var(--color-1);
+}
+
+custom-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;    
+    background: var(--color-3);
+    border: 1px solid var(--color-4);
+}
+
+custom-cell:focus {
+    outline: none;
+}
+
+custom-cell:not([data-focused="true"]) input,
+custom-cell:not([data-focused="true"]) select {
+    pointer-events: none;
+}
+
+custom-cell[data-focused="true"] {
+    border-color: var(--focused-cell-border);
+    background-color: var(--focused-cell-bg);
+}
+
+/* custom-cell:focus-visible {
+    outline: 1px red solid 2px;
+} */
+
+input, 
+select {
+    width: 100%;
+}
