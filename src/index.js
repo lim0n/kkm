@@ -33,8 +33,8 @@ function runGridApp() {
                     break;
             }
             grid.appendChild(cell);
-            grid.querySelector('custom-cell').focus();
         });
+        grid.querySelector('custom-cell').focus();
     }
 
     function cellOnlyValue(val) {
