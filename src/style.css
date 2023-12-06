@@ -51,10 +51,6 @@ custom-cell[data-focused="true"] {
     background-color: var(--focused-cell-bg);
 }
 
-/* custom-cell:focus-visible {
-    outline: 1px red solid 2px;
-} */
-
 input, 
 select {
     width: 100%;

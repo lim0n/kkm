@@ -30,16 +30,7 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            },
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'assets/resource',
-            },
-            // {
-            //     test: /\.html$/i,
-            //     loader: "html-loader",
-            // },
-            { test: /\.handlebars$/, loader: "handlebars-loader" }
-        ],
-    },
+            }
+        ]
+    }
 };

@@ -5,16 +5,16 @@ export default class CustomCell extends HTMLElement {
     innerInputFocused = false;
     cellsCount;
     columnsCount;
-    field;
+    control;
 
     constructor(){
         super();
     };
 
     connectedCallback() {
-        this.field = this.querySelector('input, select');
-        if (this.field) {
-            this.field.disabled = true;
+        this.control = this.querySelector('input, select');
+        if (this.control) {
+            this.control.disabled = true;
         }
         this.grid = this.parentNode;
         this.cellIndex = this.grid.querySelectorAll('custom-cell').length;
@@ -25,8 +25,8 @@ export default class CustomCell extends HTMLElement {
         this.addEventListener('focus', this.focusCell);
         this.addEventListener('blur', (e) => {this.blurCell(e)});
         this.addEventListener('keydown', (e) => {this.keyPressed(e)});
-        this.field?.addEventListener('keydown', (e) => {this.keyPressedInput(e)});
-        this.field?.addEventListener('blur', ()=> {this.blurInput()} );
+        this.control?.addEventListener('keydown', (e) => {this.keyPressedInput(e)});
+        this.control?.addEventListener('blur', ()=> {this.blurInput()} );
     }
     
     focusCell(e) {
@@ -35,10 +35,10 @@ export default class CustomCell extends HTMLElement {
     }
 
     focusInput() {
-        if (this.field) {
+        if (this.control) {
             this.innerInputFocused = true;
-            this.field.disabled = false;
-            this.field.focus();
+            this.control.disabled = false;
+            this.control.focus();
         }
     }
 
@@ -72,15 +72,13 @@ export default class CustomCell extends HTMLElement {
                     break;
             }
         }
-
     }
 
     keyPressedInput(e) {
         e.stopPropagation();
-        console.warn('keyPressedInput', e.code);
         if (e.code == 'Escape' || e.code == 'Enter') {
             this.innerInputFocused = false;
-            this.field.disabled = true;
+            this.control.disabled = true;
             this.blurInput();
         }
     }
@@ -90,13 +88,12 @@ export default class CustomCell extends HTMLElement {
             this.focused = false;
             this.setAttribute('data-focused', false);
         }
-
     }
 
     blurInput() {
         this.innerInputFocused = false;
-        this.field.blur();
-        this.field.disabled = true;
+        this.control.blur();
+        this.control.disabled = true;
         this.focusCell();
     }
 
@@ -104,41 +101,41 @@ export default class CustomCell extends HTMLElement {
         const alg = (this.cellIndex + 1) % this.cellsCount
         var targetIndex = alg ? alg : this.cellsCount;
         this.blurCell();
-        this.grid.querySelector(`custom-cell:nth-of-type(${targetIndex})`).focus();
+        this.focusCellByIndex(targetIndex);
     }
 
     moveLeft() {
         const alg = (this.cellIndex - 1) % this.cellsCount;
         var targetIndex = alg ? alg : this.cellsCount;
         this.blurCell();
-        this.grid.querySelector(`custom-cell:nth-of-type(${targetIndex})`).focus();
+        this.focusCellByIndex(targetIndex);
     }
 
     moveUp() {
-        let step = (this.cellIndex - this.columnsCount);
-        this.blurCell();
-        if (step <= 0) {
-            step = this.cellsCount + step -1;
-            if (step == this.cellsCount - this.columnsCount) {
-                step = this.cellsCount;
-            }
-        }
-
-        this.focusCellByIndex(step);
-    }
-
-    moveDown() {
-        let step = this.cellIndex + this.columnsCount;
-        this.blurCell();
-        if (step > this.cellsCount) {
-            if (step == this.cellsCount + this.columnsCount) {
-                step = 1;
-            } else {
-                step = step % this.cellsCount + 1;
+        let targetIndex = (this.cellIndex - this.columnsCount);
+        if (targetIndex <= 0) {
+            targetIndex = this.cellsCount + targetIndex -1;
+            if (targetIndex == this.cellsCount - this.columnsCount) {
+                targetIndex = this.cellsCount;
             }
         }
         
-        this.focusCellByIndex(step);
+        this.blurCell();
+        this.focusCellByIndex(targetIndex);
+    }
+
+    moveDown() {
+        let targetIndex = this.cellIndex + this.columnsCount;
+        if (targetIndex > this.cellsCount) {
+            if (targetIndex == this.cellsCount + this.columnsCount) {
+                targetIndex = 1;
+            } else {
+                targetIndex = targetIndex % this.cellsCount + 1;
+            }
+        }
+        
+        this.blurCell();
+        this.focusCellByIndex(targetIndex);
     }
 
     focusCellByIndex(index) {
@@ -146,7 +143,9 @@ export default class CustomCell extends HTMLElement {
     }
 
     getColumnsCount() {
-        return !this.columnsCount ? Number(document.documentElement.style.getPropertyValue('--grid-columns-count')) : this.columnsCount
+        return !this.columnsCount 
+            ? Number(document.documentElement.style.getPropertyValue('--grid-columns-count')) 
+            : this.columnsCount
     }
     
 }

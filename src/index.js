@@ -1,5 +1,4 @@
 import './style.css';
-// import Icon from './favicon.png';
 import CustomGrid from './assets/custom-elements/custom-grid.js';
 import CustomCell from './assets/custom-elements/custom-cell.js';
 import gridValues from './data.json';
@@ -10,9 +9,8 @@ runGridApp();
 
 function runGridApp() {
     document.documentElement.style.setProperty('--grid-columns-count', GRID_COLUMN_COUNT);
-    customElements.define('custom-grid', CustomGrid);
-    // customElements.define('custom-cell', CustomCell, {extends: 'a'});
     customElements.define('custom-cell', CustomCell);
+    customElements.define('custom-grid', CustomGrid);
     const _grid = document.createElement('custom-grid');
     document.body.appendChild(_grid);
     fillGrid(_grid);
@@ -35,6 +33,7 @@ function runGridApp() {
                     break;
             }
             grid.appendChild(cell);
+            grid.querySelector('custom-cell').focus();
         });
     }
 
